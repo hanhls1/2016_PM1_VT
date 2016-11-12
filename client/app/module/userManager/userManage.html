@@ -1,0 +1,155 @@
+<div class="page page-table" data-ng-controller="UserManageCtrl">
+    <!--Man hinh them moi-->
+
+    <div class="row ui-section" ng-show="isShowSearch">
+        <div class="col-lg-8 clearfix">
+            <h3 class="section-header">Quản lý người dùng</h3>
+        </div>
+        <!--search info session-->
+        <div class="col-md-12">
+            <section class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-1">
+                                <md-input-container class="md-block">
+                                    <label>Tên đăng nhập</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <input ng-model="searchForm.userName"></md-input-container>
+                            </div>
+                            <div class="col-md-4 col-md-offset-2">
+                                <md-input-container class="md-block">
+                                    <label>Họ và tên</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <input ng-model="searchForm.fullName"></md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-1">
+                                <md-input-container class="md-block">
+                                    <label>Mã nhân viên</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <input ng-model="searchForm.employeeCode"></md-input-container>
+                            </div>
+                            <div class="col-md-4 col-md-offset-2">
+                                <md-input-container class="md-block">
+                                    <label>Email</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <input ng-model="searchForm.email"></md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-1">
+                                <md-input-container class="md-block">
+                                    <label>Trạng thái</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <md-select ng-model="searchForm.status">
+                                        <md-option ng-repeat="status in statusList"  value="{{status.id}}">
+                                            {{status.name}}
+                                        </md-option>
+                                    </md-select>
+                            </div>
+                            <div class="col-md-4 col-md-offset-2">
+                                <md-input-container class="md-block">
+                                    <label>Số điện thoại</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <input ng-model="searchForm.phoneNumber"></md-input-container>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-1">
+                                <md-input-container class="md-block">
+                                    <label>Trạng thái</label>
+                                    <md-icon class="zmdi zmdi-account"></md-icon>
+                                    <md-autocomplete
+                                        ng-model="searchForm.organizeId"
+                                                     md-items="item in queryOrganize(organizeText)"
+                                                     md-search-text-change="searchTextChange"
+                                                     md-selected-item-change="selectedItemChange(item)"
+                                                     md-search-text="organizeText"
+                                                     md-item-text="item.name"
+                                                     md-min-length="1">
+                                        <md-item-template>
+                                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+                                        </md-item-template>
+                                        <md-not-found>
+                                            No states matching "{{ctrl.searchText}}" were found.
+                                            <!--<a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>-->
+                                        </md-not-found>
+                                    </md-autocomplete>
+
+                                  </md-input-container>
+
+                            </div>
+                            <div class="col-md-1">
+                                <div class="row">
+
+                                <div class="col-md-2 ">
+                                    <md-input-container>
+                                        <md-icon class="zmdi zmdi-search" ng-click="showDepartmentSearchForm($event)"></md-icon>
+                                    </md-input-container>
+                                </div>
+                                <div class="col-md-2">
+                                    <md-input-container >
+                                        <md-icon class="zmdi zmdi-close"></md-icon>
+                                    </md-input-container>
+                                </div>
+                                    </div>
+                            </div>
+                        </div>
+                    <div class="col-md-8 pull-right">
+                        <md-button type="button" ng-click="searchModuleManage()"
+                                   class="md-raised btn-w-md md-primary">Tìm kiếm
+                        </md-button>
+                        <md-button class="btn-w-md btn-default"
+                                   data-ng-click="insertApp()">Thêm mới
+                        </md-button>
+                    </div>
+
+
+                </div>
+            </section>
+        </div>
+        <div class="col-md-12">
+            <section class="panel panel-default table-dynamic">
+                <div id="grid" kendo-grid="grid" k-options="gridOptions"
+                     k-ng-delay="gridOptions" k-on-change="gridChange(dataItem)">
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+    <script id="delete-app-confirmation" type="x/kendo-template">
+        <div>
+            <p style="padding: 10px">Bạn có chắc chắn muốn xóa ứng dụng <b>{{appSelected.name}}</b> không?</p>
+            <div class="window-footer pull-right">
+                <button class="btn btn-danger delete-cancel">Đóng lại</button>
+                <button class="btn btn-success delete-confirm" >Xác nhận</button>
+            </div>
+        </div>
+    </script>
+    <script id="save-app-confirmation" type="x/kendo-template">
+        <div>
+            <p style="padding: 10px">Bạn có chắc chắn muốn lưu không?</p>
+            <div class="window-footer pull-right">
+                <button class="btn btn-danger save-cancel">Đóng lại</button>
+                <button class="btn btn-success save-confirm" >Xác nhận</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/x-kendo-template" id="toolbar">
+        <div class="toolbar">
+            <md-button class="btn-w-md btn-primary"
+                       data-ng-click="deleteMultichoice()">Xóa lựa chọn
+            </md-button>
+        </div>
+    </script>
+</div>

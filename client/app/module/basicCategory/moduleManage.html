@@ -1,0 +1,172 @@
+<div class="page page-table" data-ng-controller="ModuleManageCtrl">
+	<!--Man hinh them moi-->
+	<div class="row ui-section" ng-show="!isShowSearch">
+		<div class="col-lg-8 clearfix">
+			<h3 class="section-header" ng-show="isNew">Thêm mới ứng dụng</h3>
+			<h3 class="section-header" ng-show="!isNew">Sửa ứng dụng</h3>
+		</div>
+		<md-content layout-padding class="col-md-12">
+			<form name="appFormInfo" data-ng-submit="save(appFormInfo.$valid)">
+				<input type="hidden" ng-model="appForm.id" />
+				<div layout="row">
+					<md-input-container class="md-block col-md-4 col-md-offset-1">
+						<label>Tên ứng dụng</label>
+						<md-icon class="zmdi zmdi-account"></md-icon>
+						<input md-maxlength="200" required md-no-asterisk name="name" ng-model="appForm.name">
+						<div ng-messages="appFormInfo.name.$error">
+							<div ng-message="required">Tên ứng dụng bắt buộc nhập</div>
+							<div ng-message="md-maxlength">Tên ứng dụng không được quá 200 ký tự</div>
+						</div>
+					</md-input-container>
+					<md-input-container class="md-block col-md-4 col-md-offset-1">
+						<label>Mã ứng dụng</label>
+						<md-icon class="zmdi zmdi-account"></md-icon>
+						<input required name="code" md-maxlength="50" ng-model="appForm.code">
+						<div ng-messages="appFormInfo.code.$error">
+							<div ng-message="required">Mã ứng dụng bắt buộc nhập</div>
+							<div ng-message="md-maxlength">Mã ứng dụng không được quá 50 ký tự</div>
+						</div>
+					</md-input-container>
+
+				</div>
+
+				<md-input-container class="md-block col-md-9 col-md-offset-1">
+					<label>Mô tả</label>
+					<md-icon class="zmdi zmdi-account"></md-icon>
+					<input name="description" ng-model="appForm.description"  md-maxlength="2000" />
+					<div ng-messages="appFormInfo.description.$error" role="alert">
+						<div
+							ng-message-exp="['maxlength']">
+							Mô tả không được quá 2000 ký tự
+						</div>
+					</div>
+				</md-input-container>
+				<div class="col-md-8 pull-right">
+					<md-button type="button" class="btn-w-md btn-default" ng-click="resetForm()">Hủy bỏ</md-button>
+					<md-button type="submit" ng-disabled="appFormInfo.$invalid" class="md-raised btn-w-md md-primary">Lưu</md-button>
+				</div>
+			</form>
+		</md-content>
+
+
+
+		<!-- 		<div class="col-md-12">
+			<input type="hidden" ng-model="appForm.id" />
+			<form name="appFormInfo" class="form-horizontal form-validation"
+				data-ng-submit="save(appFormInfo.$valid)">
+				<section class="panel panel-default">
+					<div class="panel-body">
+						<div class="form-group">
+							<div ng-show="false">
+								<input ng-model="appForm.id">
+							</div>
+							<div class="row">
+								<div class="col-md-4 col-md-offset-1">
+									<md-input-container class="md-block"> <label>Tên
+										ứng dụng</label> <md-icon class="zmdi zmdi-account"></md-icon> <input
+										required name="name" ng-required="required"
+										ng-model="appForm.name"> </md-input-container>
+								</div>
+								<div class="col-md-4 col-md-offset-2">
+									<md-input-container class="md-block"> <label>Mã
+										ứng dụng</label> <md-icon class="zmdi zmdi-account"></md-icon> <input
+										required name="code" ng-required="required"
+										ng-model="appForm.code"> </md-input-container>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-4 col-md-offset-1">
+									<md-input-container class="md-block"> <label>Mô
+										tả</label> <md-icon class="zmdi zmdi-account"></md-icon> <input
+										ng-model="appForm.description"> </md-input-container>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 pull-right">
+							<md-button type="button" class="btn-w-md"
+								ng-click="isShowSearch=!isShowSearch">Tìm kiếm</md-button>
+							<md-button class="md-raised btn-w-md md-primary"
+								ng-disabled="appFormInfo.$invalid" type="submit">Lưu</md-button>
+						</div>
+
+					</div>
+				</section>
+			</form>
+		</div> -->
+	</div>
+	<div class="row ui-section" ng-show="isShowSearch">
+		<div class="col-lg-8 clearfix">
+			<h3 class="section-header">Thông tin ứng dụng</h3>
+		</div>
+		<!--search info session-->
+		<div class="col-md-12">
+			<section class="panel panel-default">
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-4 col-md-offset-1">
+								<md-input-container class="md-block">
+									<label>Tên ứng dụng</label>
+									<md-icon class="zmdi zmdi-account"></md-icon>
+									<input ng-model="searchForm.name"></md-input-container>
+							</div>
+							<div class="col-md-4 col-md-offset-2">
+								<md-input-container class="md-block">
+								<label>Mã ứng dụng</label>
+								<md-icon class="zmdi zmdi-account"></md-icon>
+								<input ng-model="searchForm.code"></md-input-container>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8 pull-right">
+						<md-button type="button" ng-click="searchModuleManage()"
+							class="md-raised btn-w-md md-primary">Tìm kiếm
+						</md-button>
+						<md-button class="btn-w-md btn-default"
+							data-ng-click="insertApp()">Thêm mới
+						</md-button>
+					</div>
+
+
+				</div>
+			</section>
+		</div>
+		<div class="col-md-12">
+			<section class="panel panel-default table-dynamic">
+				<h3 class="section-header">Kết quả tìm kiếm</h3>
+				<div id="grid" kendo-grid="grid" k-options="gridOptions"
+					k-ng-delay="gridOptions" k-on-change="gridChange(dataItem)">
+				</div>
+			</section>
+
+		</div>
+
+	</div>
+	<script id="delete-app-confirmation" type="x/kendo-template">
+        <div>
+            <p style="padding: 10px">Bạn có chắc chắn muốn xóa ứng dụng <b>{{appSelected.name}}</b> không?</p>
+            <div class="window-footer pull-right">
+                <button class="btn btn-danger delete-cancel">Đóng lại</button>
+                <button class="btn btn-success delete-confirm" >Xác nhận</button>
+            </div>
+        </div>
+    </script>
+	<script id="save-app-confirmation" type="x/kendo-template">
+        <div>
+            <p style="padding: 10px">Bạn có chắc chắn muốn lưu không?</p>
+            <div class="window-footer pull-right">
+                <button class="btn btn-danger save-cancel">Đóng lại</button>
+                <button class="btn btn-success save-confirm" >Xác nhận</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/x-kendo-template" id="toolbar">
+          <div class="toolbar">
+				<md-button class="btn-w-md btn-primary"
+							data-ng-click="deleteMultichoice()">Xóa lựa chọn
+				</md-button>
+          </div>
+   </script>
+</div>
